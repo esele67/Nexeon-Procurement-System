@@ -425,6 +425,20 @@ const VendorGrowthChart = ({ data }) => {
     </div>
   );
 };
+const Settings = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+);
+
+const LogOut = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <polyline points="16,17 21,12 16,7"/>
+    <line x1="21" y1="12" x2="9" y2="12"/>
+  </svg>
+);
 
 const Dashboard = () => {
   // Toggle between 'client' and 'admin' to test both views
@@ -549,6 +563,10 @@ const handleViewRFQDetails = (rfqId, e) => {
 
   const metrics = getMetrics();
 
+  const handleLogout = () => {
+    console.log('Logout');
+  };
+
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Dark professional gradient background */}
@@ -608,6 +626,15 @@ const handleViewRFQDetails = (rfqId, e) => {
 
       {user.role === 'admin' ? (
         <>
+       <div
+        onClick={() => window.navigate('/admin/clients')}
+        className="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-gray-200 hover:bg-gray-700/30 rounded-lg transition-all cursor-pointer"
+      >
+        <Users size={18} />
+        <span className="text-sm">Clients</span>
+      </div>
+
+
           {/* Vendors menu */}
           <div
             onClick={() => window.navigate('/vendors')}
@@ -624,6 +651,28 @@ const handleViewRFQDetails = (rfqId, e) => {
           >
             <FileText size={18} />
             <span className="text-sm">Reports</span>
+          </div>
+
+          <div className="mt-auto pt-6 border-t border-gray-800/50">
+            <div
+              onClick={() => window.navigate('/client/settings')}
+              className={`flex items-center gap-3 px-3 py-3 ${
+                window.location.pathname === '/client/settings'
+                  ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+              } rounded-lg transition-all cursor-pointer`}
+            >
+              <Settings size={18} />
+              <span className="text-sm">Settings</span>
+            </div>
+            
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer w-full"
+            >
+              <LogOut size={18} />
+              <span className="text-sm">Logout</span>
+            </button>
           </div>
         </>
       ) : (

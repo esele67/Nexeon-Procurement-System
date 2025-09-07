@@ -2,41 +2,41 @@ import React from 'react';
 import Login from './components/Login.jsx';
 import SignUp from './components/Sign-up.jsx';
 import Dashboard from './components/Dashboard.jsx';
-import NewRFQ from './components/NewRFQ.jsx';
+import ClientDashboard from './client/Dashboard.jsx';
+import NewRFQ from './client/NewRFQ.jsx';
 import RFQDetails from './components/RFQ-details.jsx';
 import VendorManagement from './components/Vendor-Management.jsx';
-import Reports from './components/Reports.jsx'; // ✅ Added Reports import
+import Reports from './components/Reports.jsx';
+import MyRFQs from './client/MyRFQ.jsx';
+import ClientQuotes from './client/ClientQuotes.jsx';
+import ClientOrdersApprovals from './client/ClientOrdersApprovals.jsx';
+import InvoicesPayments from './client/InvoicesPayments.jsx';
+import AdminAddClients from './components/AdminAddClients.jsx'; // ✅ Import new page
 
 const App = () => {
   const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
 
-  // Simple router function
   const navigate = (path) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
   };
 
-  // Listen for browser back/forward buttons
   React.useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
     };
-
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Make navigate function globally available
   React.useEffect(() => {
     window.navigate = navigate;
   }, []);
 
-  // Check if user is authenticated
   const isAuthenticated = () => {
     return localStorage.getItem('authToken');
   };
 
-  // Route protection
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated()) {
       return <Login />;
@@ -44,24 +44,67 @@ const App = () => {
     return children;
   };
 
-  // Route rendering function
   const renderRoute = () => {
     const path = currentPath;
 
     // Public routes
-    if (path === '/' || path === '/login') {
-      return <Login />;
-    }
+    // if (path === '/' || path === '/login') return <Login />;
+    // if (path === '/signup') return <SignUp />;
 
-    if (path === '/signup') {
-      return <SignUp />;
-    }
-
-    // Protected routes
+    // Admin routes
     if (path === '/dashboard') {
       return (
         <ProtectedRoute>
           <Dashboard />
+        </ProtectedRoute>
+      );
+    }
+
+    if (path === '/admin/clients') { // ✅ New Admin Clients route
+      return (
+        <ProtectedRoute>
+          <AdminAddClients />
+        </ProtectedRoute>
+      );
+    }
+
+    // Client routes
+    if (path === '/client/dashboard') {
+      return (
+        <ProtectedRoute>
+          <ClientDashboard />
+        </ProtectedRoute>
+      );
+    }
+
+    if (path === '/client/rfq/my') {
+      return (
+        <ProtectedRoute>
+          <MyRFQs />
+        </ProtectedRoute>
+      );
+    }
+
+    if (path === '/client/quotes') {
+      return (
+        <ProtectedRoute>
+          <ClientQuotes />
+        </ProtectedRoute>
+      );
+    }
+
+    if (path === '/client/orders-approvals') {
+      return (
+        <ProtectedRoute>
+          <ClientOrdersApprovals />
+        </ProtectedRoute>
+      );
+    }
+
+    if (path === '/client/invoices-payments') {
+      return (
+        <ProtectedRoute>
+          <InvoicesPayments />
         </ProtectedRoute>
       );
     }
@@ -83,7 +126,6 @@ const App = () => {
       );
     }
 
-    // ✅ Vendor Management route
     if (path === '/vendors') {
       return (
         <ProtectedRoute>
@@ -92,7 +134,6 @@ const App = () => {
       );
     }
 
-    // ✅ New Reports route
     if (path === '/reports') {
       return (
         <ProtectedRoute>
@@ -101,7 +142,7 @@ const App = () => {
       );
     }
 
-    // Default route
+    // Default fallback
     if (isAuthenticated()) {
       return (
         <ProtectedRoute>

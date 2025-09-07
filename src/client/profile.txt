@@ -1,0 +1,158 @@
+const ProfileSettingsPage = ({ onBack }) => (
+  <div className="min-h-screen bg-gray-950 p-4 lg:p-8">
+    <div className="max-w-4xl mx-auto">
+      <div className="flex items-center gap-4 mb-8">
+        <button 
+          onClick={onBack}
+          className="p-2 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg border border-gray-600/50 transition-all"
+        >
+          <ArrowLeft size={20} className="text-gray-300" />
+        </button>
+        <div>
+          <h1 className="text-2xl lg:text-3xl font-bold text-white">Profile & Settings</h1>
+          <p className="text-gray-400">Manage your account and preferences</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Personal Information</h3>
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">First Name</label>
+                  <input 
+                    type="text" 
+                    defaultValue="John"
+                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">Last Name</label>
+                  <input 
+                    type="text" 
+                    defaultValue="Smith"
+                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Email Address</label>
+                <input 
+                  type="email" 
+                  defaultValue="john.smith@techcorp.com"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Phone Number</label>
+                <input 
+                  type="tel" 
+                  defaultValue="+1 (555) 123-4567"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Company Information</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Company Name</label>
+                <input 
+                  type="text" 
+                  defaultValue="TechCorp Inc."
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Job Title</label>
+                <input 
+                  type="text" 
+                  defaultValue="Procurement Manager"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Company Address</label>
+                <textarea 
+                  rows="3"
+                  defaultValue="123 Business Ave, Suite 100&#10;New York, NY 10001&#10;United States"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white focus:outline-none focus:border-blue-500/50 transition-colors resize-none"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Notification Preferences</h3>
+            <div className="space-y-4">
+              {[
+                { label: "Email notifications for new quotes", checked: true },
+                { label: "SMS alerts for urgent RFQs", checked: false },
+                { label: "Weekly digest of activities", checked: true },
+                { label: "Order delivery notifications", checked: true },
+                { label: "Marketing and promotional emails", checked: false }
+              ].map((pref, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  <input 
+                    type="checkbox" 
+                    defaultChecked={pref.checked}
+                    className="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500" 
+                  />
+                  <span className="text-white">{pref.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Profile Picture</h3>
+            <div className="text-center">
+              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4">
+                JS
+              </div>
+              <button className="px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 rounded-lg text-blue-400 text-sm font-medium transition-all">
+                Change Picture
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Account Security</h3>
+            <div className="space-y-3">
+              <button className="w-full px-4 py-2 bg-gray-700/30 hover:bg-gray-600/40 border border-gray-600/30 rounded-lg text-gray-300 text-sm transition-all text-left">
+                Change Password
+              </button>
+              <button className="w-full px-4 py-2 bg-gray-700/30 hover:bg-gray-600/40 border border-gray-600/30 rounded-lg text-gray-300 text-sm transition-all text-left">
+                Two-Factor Authentication
+              </button>
+              <button className="w-full px-4 py-2 bg-gray-700/30 hover:bg-gray-600/40 border border-gray-600/30 rounded-lg text-gray-300 text-sm transition-all text-left">
+                Login Activity
+              </button>
+            </div>
+          </div>
+
+          <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 border border-gray-800/50 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 rounded-lg text-blue-400 text-sm font-medium transition-all">
+                Save Changes
+              </button>
+              <button className="w-full px-4 py-2 bg-gray-700/30 hover:bg-gray-600/40 border border-gray-600/30 rounded-lg text-gray-300 text-sm transition-all">
+                Export Data
+              </button>
+              <button className="w-full px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-lg text-red-400 text-sm font-medium transition-all">
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);

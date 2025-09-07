@@ -332,6 +332,10 @@ TechCorp Inc.`;
     return 'text-red-400';
   };
 
+  const handleLogout = () => {
+    console.log('Logout');
+  };
+
   return (
     <div className="min-h-screen bg-gray-950">
       {/* Dark professional gradient background */}
@@ -391,6 +395,14 @@ TechCorp Inc.`;
 
       {user.role === 'admin' ? (
         <>
+        <div
+          onClick={() => window.navigate('/admin/clients')}
+          className="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-gray-200 hover:bg-gray-700/30 rounded-lg transition-all cursor-pointer"
+        >
+          <Users size={18} />
+          <span className="text-sm">Clients</span>
+        </div>
+
           {/* Vendors menu */}
           <div
             onClick={() => window.navigate('/vendors')}
@@ -407,6 +419,28 @@ TechCorp Inc.`;
           >
             <FileText size={18} />
             <span className="text-sm">Reports</span>
+          </div>
+
+          <div className="mt-auto pt-6 border-t border-gray-800/50">
+            <div
+              onClick={() => window.navigate('/client/settings')}
+              className={`flex items-center gap-3 px-3 py-3 ${
+                window.location.pathname === '/client/settings'
+                  ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+              } rounded-lg transition-all cursor-pointer`}
+            >
+              <Settings size={18} />
+              <span className="text-sm">Settings</span>
+            </div>
+            
+            <button 
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer w-full"
+            >
+              <LogOut size={18} />
+              <span className="text-sm">Logout</span>
+            </button>
           </div>
         </>
       ) : (
