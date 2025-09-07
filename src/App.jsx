@@ -38,9 +38,9 @@ const App = () => {
   };
 
   const ProtectedRoute = ({ children }) => {
-    if (!isAuthenticated()) {
-      return <Login />;
-    }
+    // if (!isAuthenticated()) {
+    //   return <Login />;
+    // }
     return children;
   };
 
