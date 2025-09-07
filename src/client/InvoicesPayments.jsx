@@ -840,7 +840,7 @@ const InvoicesPayments = () => {
 </div>
 
         {/* Main Content */}
-        <div className="flex-1 lg:ml-64 w-full min-w-0">
+        <div className="flex-1 w-full min-w-0">
           {/* Top Header */}
           <div className="bg-gray-900/60 backdrop-blur-xl border-b border-gray-800/50 px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">

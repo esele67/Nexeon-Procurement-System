@@ -130,6 +130,21 @@ const Search = ({ size = 16, className = "" }) => (
   </svg>
 );
 
+const Settings = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+);
+
+const LogOut = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+    <polyline points="16,17 21,12 16,7"/>
+    <line x1="21" y1="12" x2="9" y2="12"/>
+  </svg>
+);
+
 // Animated Avatar Component
 const AnimatedAvatar = ({ name, role }) => {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -176,9 +191,7 @@ const RFQDetail = () => {
   // Mock user - change between 'client' and 'admin' to test different views
   const [user, setUser] = useState({ name: 'Yehor', role: 'admin' });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showQuoteModal, setShowQuoteModal] = useState(false);
   const [showVendorModal, setShowVendorModal] = useState(false);
-  const [editingQuote, setEditingQuote] = useState(null);
   const [selectedVendors, setSelectedVendors] = useState([]);
 
   // Mock RFQ data
@@ -249,71 +262,10 @@ const RFQDetail = () => {
     console.log('Quote approved:', quoteId);
   };
 
-  const handleEditQuote = (quote) => {
-    setEditingQuote(quote);
-    setShowQuoteModal(true);
-  };
-
-  const handleAddQuote = () => {
-    setEditingQuote(null);
-    setShowQuoteModal(true);
-  };
-
-  const handleSaveQuote = (quoteData) => {
-    if (editingQuote) {
-      // Update existing quote
-      setQuotes(prev => prev.map(q => 
-        q.id === editingQuote.id ? { ...q, ...quoteData } : q
-      ));
-    } else {
-      // Add new quote
-      const newQuote = {
-        id: quotes.length + 1,
-        ...quoteData,
-        status: 'pending',
-        score: Math.floor(Math.random() * 20) + 80 // Mock score
-      };
-      setQuotes(prev => [...prev, newQuote]);
-    }
-    setShowQuoteModal(false);
-    setEditingQuote(null);
-  };
-
   const handleSendRFQ = () => {
     console.log('Sending RFQ to vendors:', selectedVendors);
     setShowVendorModal(false);
     setSelectedVendors([]);
-  };
-
-  const generateEmail = () => {
-    return `Subject: Request for Quotation - ${rfq.title}
-
-Dear Vendor,
-
-We are requesting a quotation for the following procurement:
-
-Project: ${rfq.title}
-Description: ${rfq.description}
-Budget Range: $${rfq.budget.toLocaleString()}
-Required Date: ${rfq.requiredDate}
-
-Please provide your best quote including:
-- Itemized pricing
-- Lead time
-- Warranty information
-- Any additional services
-
-Please respond by ${new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()}.
-
-Best regards,
-Procurement Team
-TechCorp Inc.`;
-  };
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    // Show toast notification in real app
-    console.log('Copied to clipboard');
   };
 
   const getTimelineIcon = (type) => {
@@ -334,6 +286,154 @@ TechCorp Inc.`;
 
   const handleLogout = () => {
     console.log('Logout');
+  };
+
+  // --- Improved Email Generator Component ---
+  const EmailGenerator = ({ rfq, vendors, selectedVendors }) => {
+    const [useSelected, setUseSelected] = useState(true);
+    const [manualRecipients, setManualRecipients] = useState('');
+    const [subject, setSubject] = useState(`Request for Quotation - ${rfq.title}`);
+    const defaultBodyTemplate = `Hello {{vendor}},\n\nWe are requesting a quotation for the project:\nProject: ${rfq.title}\nDescription: ${rfq.description}\nBudget Range: $${rfq.budget.toLocaleString()}\nRequired Date: ${new Date(rfq.requiredDate).toLocaleDateString()}\n\nPlease provide your best quote including itemized pricing, lead time, warranty information and any additional services.\n\nKind regards,\n${rfq.clientName}`;
+    const [body, setBody] = useState(defaultBodyTemplate);
+
+    const vendorEmail = (vendor) => {
+      // Create a predictable placeholder email for the mock vendors
+      return `${vendor.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@vendor.example.com`;
+    };
+
+    const recipientsList = () => {
+      if (useSelected && selectedVendors.length > 0) {
+        return selectedVendors
+          .map(id => vendors.find(v => v.id === id))
+          .filter(Boolean)
+          .map(vendorEmail)
+          .join(',');
+      }
+      return manualRecipients.split(',').map(s => s.trim()).filter(Boolean).join(',');
+    };
+
+    const previewBodyFor = (recipient) => {
+      const vendorName = vendors.find(v => vendorEmail(v) === recipient)?.name || 'Vendor';
+      return body.replace(/{{vendor}}/g, vendorName).replace(/{{rfq_title}}/g, rfq.title);
+    };
+
+    const handleCopy = async () => {
+      const to = recipientsList();
+      const text = `Subject: ${subject}\nTo: ${to}\n\n${previewBodyFor(to.split(',')[0] || '')}`;
+      await navigator.clipboard.writeText(text);
+      console.log('Email copied');
+    };
+
+    const handleOpenMailClient = () => {
+      const to = recipientsList();
+      const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.open(mailto, '_blank');
+    };
+
+    const handleDownloadEML = () => {
+      const to = recipientsList();
+      const content = `To: ${to}\nSubject: ${subject}\n\n${body}`;
+      const blob = new Blob([content], { type: 'message/rfc822' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rfq-${rfq.id}.eml`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+
+    const insertTemplate = () => setBody(defaultBodyTemplate);
+
+    return (
+      <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl border border-gray-800/50 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-white">Email Generator</h3>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopy}
+              className="flex items-center gap-2 px-3 py-1 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 text-sm font-medium transition-all"
+            >
+              <Copy size={14} />
+              Copy
+            </button>
+            <button
+              onClick={handleOpenMailClient}
+              className="flex items-center gap-2 px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded-lg text-white text-sm font-medium transition-all"
+            >
+              <Send size={14} />
+              Open Mail Client
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+          <div className="lg:col-span-2">
+            <label className="block text-gray-300 text-sm font-medium mb-1">Subject</label>
+            <input
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-300 text-sm font-medium mb-1">Recipients</label>
+            <div className="flex items-center gap-2">
+              <label className="flex items-center gap-2 text-sm text-gray-300">
+                <input type="checkbox" checked={useSelected} onChange={() => setUseSelected(!useSelected)} />
+                Use selected vendors
+              </label>
+            </div>
+            {!useSelected && (
+              <input
+                type="text"
+                value={manualRecipients}
+                onChange={(e) => setManualRecipients(e.target.value)}
+                placeholder="comma separated emails"
+                className="w-full mt-2 bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
+              />
+            )}
+            {useSelected && (
+              <div className="mt-2 text-gray-300 text-sm">
+                {selectedVendors.length === 0 ? 'No vendors selected' : selectedVendors.map(id => vendors.find(v => v.id === id)?.name).join(', ')}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-gray-300 text-sm font-medium">Body</label>
+            <button onClick={insertTemplate} className="text-sm text-blue-400">Insert template</button>
+          </div>
+          <textarea
+            rows={8}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none font-mono"
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button onClick={handleDownloadEML} className="px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 text-sm font-medium transition-all">Download .eml</button>
+          <a
+            href={`mailto:${encodeURIComponent(recipientsList())}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`}
+            className="px-4 py-2 bg-green-600 hover:bg-green-500 rounded-lg text-white text-sm font-medium transition-all"
+            onClick={(e) => { if (!recipientsList()) { e.preventDefault(); alert('Please enter recipients or select vendors.'); } }}
+          >
+            Quick Mailto
+          </a>
+        </div>
+
+        <div className="mt-4 bg-gray-800/50 rounded-lg p-3">
+          <h4 className="text-sm text-gray-300 mb-2">Preview (first recipient)</h4>
+          <pre className="text-gray-300 text-xs whitespace-pre-wrap font-mono max-h-40 overflow-y-auto">{`To: ${recipientsList()}\nSubject: ${subject}\n\n${previewBodyFor(recipientsList().split(',')[0] || '')}`}</pre>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -376,7 +476,7 @@ TechCorp Inc.`;
                   {user.role === 'admin' ? 'Admin Panel' : 'Client Portal'}
                 </span>
               </div>
-              
+               
               {/* Mobile close button */}
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -476,13 +576,13 @@ TechCorp Inc.`;
                 >
                   <Menu size={20} className="text-gray-300" />
                 </button>
-               <button
-  onClick={() => window.navigate('/dashboard')}
-  className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
-  aria-label="Back to dashboard"
->
-  <ArrowLeft size={20} className="text-gray-300" />
-</button>
+                <button
+                  onClick={() => window.navigate('/dashboard')}
+                  className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
+                  aria-label="Back to dashboard"
+                >
+                  <ArrowLeft size={20} className="text-gray-300" />
+                </button>
 
                 <div>
                   <h1 className="text-xl lg:text-2xl font-bold text-white">RFQ Details</h1>
@@ -584,57 +684,29 @@ TechCorp Inc.`;
 
               {/* Right Column - Admin Tools & Quotes */}
               <div className="xl:col-span-7 space-y-6">
-                {/* Admin Tools */}
+                {/* Vendor Selection */}
                 {user.role === 'admin' && (
-                  <>
-                    {/* Vendor Selection */}
-                    <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl border border-gray-800/50 p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-white">Vendor Selection</h3>
-                        <button
-                          onClick={() => setShowVendorModal(true)}
-                          className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white text-sm font-medium transition-all"
-                        >
-                          Select Vendors
-                        </button>
-                      </div>
-                      <p className="text-gray-400 text-sm">Choose 2-3 vendors to send this RFQ to for competitive quotes.</p>
+                  <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl border border-gray-800/50 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold text-white">Vendor Selection</h3>
+                      <button
+                        onClick={() => setShowVendorModal(true)}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white text-sm font-medium transition-all"
+                      >
+                        Select Vendors
+                      </button>
                     </div>
-
-                    {/* Email Generator */}
-                    <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl border border-gray-800/50 p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-semibold text-white">Email Generator</h3>
-                        <button
-                          onClick={() => copyToClipboard(generateEmail())}
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 text-sm font-medium transition-all"
-                        >
-                          <Copy size={14} />
-                          Copy Email
-                        </button>
-                      </div>
-                      <div className="bg-gray-800/50 rounded-lg p-4 max-h-40 overflow-y-auto">
-                        <pre className="text-gray-300 text-xs whitespace-pre-wrap font-mono">
-                          {generateEmail()}
-                        </pre>
-                      </div>
-                    </div>
-                  </>
+                    <p className="text-gray-400 text-sm">Choose 2-3 vendors to send this RFQ to for competitive quotes.</p>
+                  </div>
                 )}
 
-                {/* Quotes Section */}
+                {/* Improved Email Generator */}
+                <EmailGenerator rfq={rfq} vendors={vendors} selectedVendors={selectedVendors} />
+
+                {/* Quotes Section (read-only: removed add/edit buttons) */}
                 <div className="bg-gray-900/60 backdrop-blur-xl rounded-xl border border-gray-800/50 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-white">Quotes ({quotes.length})</h3>
-                    {user.role === 'admin' && (
-                      <button
-                        onClick={handleAddQuote}
-                        className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 rounded-lg text-white text-sm font-medium transition-all"
-                      >
-                        <Plus size={14} />
-                        Add Quote
-                      </button>
-                    )}
                   </div>
 
                   <div className="space-y-4">
@@ -680,16 +752,6 @@ TechCorp Inc.`;
                               Approve
                             </button>
                           )}
-                          
-                          {user.role === 'admin' && (
-                            <button
-                              onClick={() => handleEditQuote(quote)}
-                              className="flex items-center gap-2 px-4 py-2 bg-gray-600/50 hover:bg-gray-500/50 border border-gray-500/50 rounded-lg text-gray-300 text-sm font-medium transition-all"
-                            >
-                              <Edit size={14} />
-                              Edit
-                            </button>
-                          )}
 
                           {quote.status === 'approved' && (
                             <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-lg text-green-400 text-sm font-medium">
@@ -709,18 +771,10 @@ TechCorp Inc.`;
                         <h4 className="text-white font-medium mb-2">No quotes yet</h4>
                         <p className="text-gray-400 text-sm mb-4">
                           {user.role === 'admin' 
-                            ? "Add quotes from vendors or wait for responses." 
+                            ? "No vendor quotes have been submitted yet." 
                             : "Waiting for vendor quotes to be submitted."
                           }
                         </p>
-                        {user.role === 'admin' && (
-                          <button
-                            onClick={handleAddQuote}
-                            className="px-6 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg text-white font-semibold transition-all"
-                          >
-                            Add First Quote
-                          </button>
-                        )}
                       </div>
                     )}
                   </div>
@@ -730,97 +784,6 @@ TechCorp Inc.`;
           </div>
         </div>
       </div>
-
-      {/* Quote Modal */}
-      {showQuoteModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 w-full max-w-md">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-white">
-                {editingQuote ? 'Edit Quote' : 'Add New Quote'}
-              </h3>
-              <button
-                onClick={() => setShowQuoteModal(false)}
-                className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
-              >
-                <X size={20} className="text-gray-400" />
-              </button>
-            </div>
-
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const formData = new FormData(e.target);
-              handleSaveQuote({
-                vendorName: formData.get('vendorName'),
-                price: parseFloat(formData.get('price')),
-                leadTime: formData.get('leadTime'),
-                notes: formData.get('notes')
-              });
-            }} className="space-y-4">
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Vendor Name</label>
-                <input
-                  type="text"
-                  name="vendorName"
-                  defaultValue={editingQuote?.vendorName || ''}
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  defaultValue={editingQuote?.price || ''}
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Lead Time</label>
-                <input
-                  type="text"
-                  name="leadTime"
-                  defaultValue={editingQuote?.leadTime || ''}
-                  placeholder="e.g., 2-3 weeks"
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Notes</label>
-                <textarea
-                  name="notes"
-                  defaultValue={editingQuote?.notes || ''}
-                  rows="3"
-                  className="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2 text-white focus:border-blue-500 focus:outline-none"
-                  placeholder="Additional details about this quote..."
-                />
-              </div>
-
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowQuoteModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 font-medium transition-all"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white font-medium transition-all"
-                >
-                  {editingQuote ? 'Update' : 'Add'} Quote
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Vendor Selection Modal */}
       {showVendorModal && (

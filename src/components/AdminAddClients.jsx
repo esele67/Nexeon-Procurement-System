@@ -181,6 +181,52 @@ const Settings = ({ size = 16, className = "" }) => (
   </svg>
 );
 
+const Save = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+    <polyline points="17,21 17,13 7,13 7,21"/>
+    <polyline points="7,3 7,8 15,8"/>
+  </svg>
+);
+
+const Calendar = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+);
+
+const Mail = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+  </svg>
+);
+
+const Phone = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+
+const Building = ({ size = 16, className = "" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18H6z"/>
+    <path d="M6 12h12"/>
+    <path d="M18 9h.01"/>
+    <path d="M18 6h.01"/>
+    <path d="M18 15h.01"/>
+    <path d="M12 9h.01"/>
+    <path d="M12 6h.01"/>
+    <path d="M12 15h.01"/>
+    <path d="M6 9h.01"/>
+    <path d="M6 6h.01"/>
+    <path d="M6 15h.01"/>
+  </svg>
+);
+
 // Animated Avatar Component
 const AnimatedAvatar = ({ name, role }) => {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -240,6 +286,372 @@ const Toast = ({ message, type, onClose }) => {
       <button onClick={onClose} className="ml-2 hover:opacity-70">
         <X size={16} />
       </button>
+    </div>
+  );
+};
+
+// Client View Modal Component
+const ClientViewModal = ({ client, isOpen, onClose }) => {
+  if (!isOpen || !client) return null;
+
+  const getStatusBadge = (status) => {
+    return status === 'active' 
+      ? 'text-green-400 bg-green-500/10 border-green-500/20'
+      : 'text-gray-400 bg-gray-500/10 border-gray-500/20';
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+              <Eye className="text-blue-400" size={20} />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Client Details</h2>
+              <p className="text-gray-400 text-sm">Complete information about this client</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
+          >
+            <X size={20} className="text-gray-400" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          {/* Basic Info Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-white flex items-center gap-2">
+              <Building size={18} className="text-blue-400" />
+              Company Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Building size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Company Name</span>
+                </div>
+                <p className="text-white font-medium">{client.companyName}</p>
+              </div>
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <User size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Contact Person</span>
+                </div>
+                <p className="text-white font-medium">{client.contactPerson}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-white flex items-center gap-2">
+              <Mail size={18} className="text-blue-400" />
+              Contact Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Mail size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Email Address</span>
+                </div>
+                <p className="text-white font-medium break-all">{client.email}</p>
+              </div>
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Phone size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Phone Number</span>
+                </div>
+                <p className="text-white font-medium">{client.phone || 'Not provided'}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Business Info Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-white flex items-center gap-2">
+              <Settings size={18} className="text-blue-400" />
+              Business Details
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Building size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Industry</span>
+                </div>
+                <p className="text-white font-medium">{client.industry || 'Not specified'}</p>
+              </div>
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Status</span>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getStatusBadge(client.status)}`}>
+                  {client.status}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Info Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-medium text-white flex items-center gap-2">
+              <Calendar size={18} className="text-blue-400" />
+              Additional Information
+            </h3>
+            <div className="space-y-4">
+              <div className="bg-gray-800/30 rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar size={16} className="text-gray-400" />
+                  <span className="text-gray-400 text-sm">Date Added</span>
+                </div>
+                <p className="text-white font-medium">{new Date(client.dateAdded).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}</p>
+              </div>
+              {client.notes && (
+                <div className="bg-gray-800/30 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <FileText size={16} className="text-gray-400" />
+                    <span className="text-gray-400 text-sm">Notes</span>
+                  </div>
+                  <p className="text-white">{client.notes}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-3 p-6 border-t border-gray-700/50">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 transition-all"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Client Edit Modal Component
+const ClientEditModal = ({ client, isOpen, onClose, onSave }) => {
+  const [editFormData, setEditFormData] = useState({
+    companyName: '',
+    contactPerson: '',
+    email: '',
+    phone: '',
+    industry: '',
+    status: 'active',
+    notes: ''
+  });
+
+  const industries = [
+    'Technology',
+    'Healthcare',
+    'Finance',
+    'Manufacturing',
+    'Retail',
+    'Education',
+    'Construction',
+    'Marketing',
+    'Data Analytics',
+    'Startup',
+    'Other'
+  ];
+
+  useEffect(() => {
+    if (client && isOpen) {
+      setEditFormData({
+        companyName: client.companyName || '',
+        contactPerson: client.contactPerson || '',
+        email: client.email || '',
+        phone: client.phone || '',
+        industry: client.industry || '',
+        status: client.status || 'active',
+        notes: client.notes || ''
+      });
+    }
+  }, [client, isOpen]);
+
+  if (!isOpen || !client) return null;
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!editFormData.companyName || !editFormData.contactPerson || !editFormData.email) {
+      return;
+    }
+    onSave(client.id, editFormData);
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-yellow-600/20 rounded-lg flex items-center justify-center">
+              <Edit className="text-yellow-400" size={20} />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Edit Client</h2>
+              <p className="text-gray-400 text-sm">Update client information</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
+          >
+            <X size={20} className="text-gray-400" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Company/Client Name <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                name="companyName"
+                value={editFormData.companyName}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                placeholder="Enter company name"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Contact Person <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="text"
+                name="contactPerson"
+                value={editFormData.contactPerson}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                placeholder="Enter contact person name"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Email Address <span className="text-red-400">*</span>
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={editFormData.email}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                placeholder="Enter email address"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={editFormData.phone}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Industry/Category
+              </label>
+              <select
+                name="industry"
+                value={editFormData.industry}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+              >
+                <option value="">Select industry</option>
+                {industries.map(industry => (
+                  <option key={industry} value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Status
+              </label>
+              <select
+                name="status"
+                value={editFormData.status}
+                onChange={handleInputChange}
+                className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Notes
+            </label>
+            <textarea
+              name="notes"
+              value={editFormData.notes}
+              onChange={handleInputChange}
+              rows={3}
+              className="w-full bg-gray-700/50 border border-gray-600/50 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all resize-none"
+              placeholder="Additional notes about the client"
+            />
+          </div>
+
+          {/* Footer */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-700/50">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-gray-700/50 hover:bg-gray-600/50 border border-gray-600/50 rounded-lg text-gray-300 transition-all"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-white font-semibold transition-all"
+            >
+              <Save size={16} />
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
@@ -341,6 +753,11 @@ const AdminAddClients = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [toast, setToast] = useState(null);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'cards'
+
+  // Modal states
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -476,8 +893,22 @@ const AdminAddClients = () => {
   };
 
   const handleEdit = (clientId) => {
-    console.log('Edit client:', clientId);
-    showToast('Edit functionality would open here');
+    const client = clients.find(c => c.id === clientId);
+    if (client) {
+      setSelectedClient(client);
+      setEditModalOpen(true);
+    }
+  };
+
+  const handleEditSave = (clientId, updatedData) => {
+    setClients(prev => prev.map(client => 
+      client.id === clientId 
+        ? { ...client, ...updatedData }
+        : client
+    ));
+    setEditModalOpen(false);
+    setSelectedClient(null);
+    showToast('Client updated successfully!');
   };
 
   const handleDelete = (clientId) => {
@@ -488,8 +919,11 @@ const AdminAddClients = () => {
   };
 
   const handleView = (clientId) => {
-    console.log('View client:', clientId);
-    showToast('View details would open here');
+    const client = clients.find(c => c.id === clientId);
+    if (client) {
+      setSelectedClient(client);
+      setViewModalOpen(true);
+    }
   };
 
   const handleSort = (field) => {
@@ -571,9 +1005,9 @@ const AdminAddClients = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-x-hidden">
-  {/* Background (make non-interactive so it doesn't affect layout/interaction) */}
-  <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 pointer-events-none"></div>
-  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none"></div>
+      {/* Background (make non-interactive so it doesn't affect layout/interaction) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none"></div>
       
       {/* Toast notifications */}
       {toast && (
@@ -583,6 +1017,26 @@ const AdminAddClients = () => {
           onClose={() => setToast(null)} 
         />
       )}
+
+      {/* Modals */}
+      <ClientViewModal 
+        client={selectedClient}
+        isOpen={viewModalOpen}
+        onClose={() => {
+          setViewModalOpen(false);
+          setSelectedClient(null);
+        }}
+      />
+
+      <ClientEditModal 
+        client={selectedClient}
+        isOpen={editModalOpen}
+        onClose={() => {
+          setEditModalOpen(false);
+          setSelectedClient(null);
+        }}
+        onSave={handleEditSave}
+      />
 
       <div className="flex min-h-screen relative z-10">
         {/* Mobile Menu Overlay */}

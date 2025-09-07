@@ -968,7 +968,7 @@ const handleViewRFQDetails = (rfqId, e) => {
                           className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 hover:border-blue-400/50 rounded-lg text-blue-400 hover:text-blue-300 text-sm font-medium transition-all"
                         >
                           <Eye size={16} />
-                          View Details
+                          View
                         </button>
                       </div>
                     </div>
