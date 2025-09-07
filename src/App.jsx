@@ -5,7 +5,7 @@ import Dashboard from './components/Dashboard.jsx';
 import ClientDashboard from './client/Dashboard.jsx';
 import NewRFQ from './client/NewRFQ.jsx';
 import RFQDetails from './components/RFQ-details.jsx';
-import VendorManagement from './components/Vendor-Management.jsx';
+import VendorManagement from './components/Vendor-management.jsx';
 import Reports from './components/Reports.jsx';
 import MyRFQs from './client/MyRFQ.jsx';
 import ClientQuotes from './client/ClientQuotes.jsx';
