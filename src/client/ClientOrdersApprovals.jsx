@@ -940,16 +940,199 @@ const ClientOrdersApprovals = () => {
     </div>
 
     {/* Order Details Modal */}
-    {isModalOpen && selectedOrder && (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl w-full max-w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto">
-          {/* ... keep modal content unchanged but ensure widths are responsive ... */}
-          {/* (use the same modal content you already have – it will inherit responsive sizes above) */}
+      {isModalOpen && selectedOrder && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-gray-900 border border-gray-800 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="border-b border-gray-800 p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white">Order Details</h2>
+                  <p className="text-gray-400 text-sm">{selectedOrder.id} • {selectedOrder.rfqReference}</p>
+                </div>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
+                >
+                  <X className="text-gray-400" size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Order Summary */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-white">Order Information</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Order ID:</span>
+                      <span className="text-white font-medium">{selectedOrder.id}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">RFQ Reference:</span>
+                      <span className="text-white">{selectedOrder.rfqReference}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Order Date:</span>
+                      <span className="text-white">{selectedOrder.orderDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Status:</span>
+                      <StatusBadge status={selectedOrder.status} />
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Total Amount:</span>
+                      <span className="text-white font-bold">${selectedOrder.totalAmount.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-lg font-semibold text-white">Vendor Details</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Company:</span>
+                      <span className="text-white font-medium">{selectedOrder.vendorDetails.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Contact:</span>
+                      <span className="text-white">{selectedOrder.vendorDetails.contact}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Email:</span>
+                      <span className="text-white">{selectedOrder.vendorDetails.email}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Phone:</span>
+                      <span className="text-white">{selectedOrder.vendorDetails.phone}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Line Items */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">Line Items</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full bg-gray-800/30 rounded-lg">
+                    <thead className="bg-gray-800/50">
+                      <tr>
+                        <th className="text-left py-3 px-4 text-gray-300 font-semibold text-sm">Product/Service</th>
+                        <th className="text-left py-3 px-4 text-gray-300 font-semibold text-sm">Quantity</th>
+                        <th className="text-left py-3 px-4 text-gray-300 font-semibold text-sm">Unit Price</th>
+                        <th className="text-left py-3 px-4 text-gray-300 font-semibold text-sm">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedOrder.lineItems.map((item, index) => (
+                        <tr key={index} className="border-b border-gray-700/30">
+                          <td className="py-3 px-4 text-white">{item.product}</td>
+                          <td className="py-3 px-4 text-gray-300">{item.quantity}</td>
+                          <td className="py-3 px-4 text-gray-300">${item.price.toLocaleString()}</td>
+                          <td className="py-3 px-4 text-white font-semibold">${item.subtotal.toLocaleString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Delivery Terms */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">Shipping & Delivery Terms</h3>
+                <div className="bg-gray-800/30 rounded-lg p-4 space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Delivery Date:</span>
+                    <span className="text-white">{selectedOrder.deliveryTerms.deliveryDate}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Location:</span>
+                    <span className="text-white">{selectedOrder.deliveryTerms.location}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Terms:</span>
+                    <span className="text-white">{selectedOrder.deliveryTerms.terms}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Approval History */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4">Approval History</h3>
+                {selectedOrder.approvalHistory.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedOrder.approvalHistory.map((entry, index) => (
+                      <div key={index} className="bg-gray-800/30 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            {entry.action === 'approved' ? (
+                              <CheckCircle className="text-green-400" size={16} />
+                            ) : (
+                              <XCircle className="text-red-400" size={16} />
+                            )}
+                            <span className="text-white font-medium capitalize">{entry.action}</span>
+                          </div>
+                          <span className="text-gray-400 text-sm">{entry.date}</span>
+                        </div>
+                        <div className="text-gray-300 text-sm">
+                          <div>By: {entry.by}</div>
+                          {entry.notes && <div className="mt-1 italic">"{entry.notes}"</div>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <Clock className="mx-auto text-gray-500 mb-2" size={32} />
+                    <p className="text-gray-400">No approval history yet</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-800">
+                {selectedOrder.status === 'pending' && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleApprove(selectedOrder.id);
+                        setIsModalOpen(false);
+                      }}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-all flex items-center gap-2"
+                    >
+                      <Check size={16} />
+                      Approve Order
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        handleReject(selectedOrder.id);
+                        setIsModalOpen(false);
+                      }}
+                      className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg transition-all flex items-center gap-2"
+                    >
+                      <X size={16} />
+                      Reject Order
+                    </button>
+                  </>
+                )}
+                
+                <button
+                  onClick={() => handleDownloadPDF(selectedOrder.id)}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-all flex items-center gap-2"
+                >
+                  <Download size={16} />
+                  Download PDF
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
 };
 
 export default ClientOrdersApprovals;
