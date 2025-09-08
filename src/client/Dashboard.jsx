@@ -813,7 +813,7 @@ const ClientDashboard = () => {
                     className="w-full h-32 object-cover"
                     poster="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDQwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMTExODI3Ii8+CjxjaXJjbGUgY3g9IjIwMCIgY3k9IjEwMCIgcj0iMzAiIGZpbGw9IiM5MzMzRUEiLz4KPHN2ZyB4PSIxODUiIHk9Ijg1IiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSI+Cjxwb2x5Z29uIHBvaW50cz0iNSwzIDE5LDEyIDUsMjEiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo8L3N2Zz4K"
                   >
-                    <source src="../../public/vid.mp4" type="video/mp4" />
+                    <source src="/vid.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>

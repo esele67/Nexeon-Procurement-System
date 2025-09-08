@@ -717,130 +717,130 @@ const InvoicesPayments = () => {
           <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsMobileMenuOpen(false)}></div>
         )}
 
-       {/* Sidebar */}
-<div className={`fixed inset-y-0 left-0 w-64 transform transition-transform duration-300 z-50 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:inset-auto lg:transform-none bg-gray-900/60 backdrop-blur-xl border-r border-gray-800/50 h-full overflow-y-auto`}>
-  <div className="p-6">
-    <div className="mb-8">
-      <div className="flex items-center gap-3 mb-2">
-        <img 
-          src="/nexeon.jpg" 
-          alt="Nexeon Logo" 
-          className="w-8 h-8 object-contain"
-        />
-        <div>
-          <h2 className="text-white text-xl font-bold">NEXEON</h2>
+        {/* Sidebar */}
+        <div className={`fixed inset-y-0 left-0 w-64 transform transition-transform duration-300 z-50 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 bg-gray-900/60 backdrop-blur-xl border-r border-gray-800/50 h-screen overflow-y-auto`}>
+          <div className="p-6">
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-2">
+                <img 
+                  src="/nexeon.jpg" 
+                  alt="Nexeon Logo" 
+                  className="w-8 h-8 object-contain"
+                />
+                <div>
+                  <h2 className="text-white text-xl font-bold">NEXEON</h2>
+                </div>
+              </div>
+              <p className="text-gray-400 text-sm font-medium">CLIENT PORTAL</p>
+              
+              <div className="mt-2">
+                <span className="px-3 py-1 rounded-md text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                  Active Client
+                </span>
+              </div>
+              
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="lg:hidden absolute top-4 right-4 p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
+              >
+                <X size={20} className="text-gray-400" />
+              </button>
+            </div>
+
+            <nav className="space-y-1">
+              {/* Dashboard */}
+              <div
+                onClick={() => window.navigate('/client/dashboard')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/dashboard'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <Home size={18} />
+                <span className={`text-sm ${window.location.pathname === '/client/dashboard' ? 'font-semibold' : ''}`}>Dashboard</span>
+              </div>
+
+              {/* My RFQs */}
+              <div
+                onClick={() => window.navigate('/client/rfq/my')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/rfq/my'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <FileText size={18} />
+                <span className="text-sm">My RFQs</span>
+              </div>
+
+              {/* Quotes */}
+              <div
+                onClick={() => window.navigate('/client/quotes')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/quotes'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <Quote size={18} />
+                <span className="text-sm">Quotes</span>
+              </div>
+
+              {/* Orders / Approvals */}
+              <div
+                onClick={() => window.navigate('/client/orders-approvals')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/orders-approvals'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <ShoppingCart size={18} />
+                <span className="text-sm">Orders / Approvals</span>
+              </div>
+
+              {/* Invoices & Payments */}
+              <div
+                onClick={() => window.navigate('/client/invoices-payments')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/invoices-payments'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <CreditCard size={18} />
+                <span className="text-sm">Invoices & Payments</span>
+              </div>
+
+            </nav>
+
+            <div className="mt-auto pt-6 border-t border-gray-800/50">
+              <div
+                onClick={() => window.navigate('/client/settings')}
+                className={`flex items-center gap-3 px-3 py-3 ${
+                  window.location.pathname === '/client/settings'
+                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
+                } rounded-lg transition-all cursor-pointer`}
+              >
+                <Settings size={18} />
+                <span className="text-sm">Settings</span>
+              </div>
+              
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer w-full"
+              >
+                <LogOut size={18} />
+                <span className="text-sm">Logout</span>
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-      <p className="text-gray-400 text-sm font-medium">CLIENT PORTAL</p>
-      
-      <div className="mt-2">
-        <span className="px-3 py-1 rounded-md text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-          Active Client
-        </span>
-      </div>
-      
-      <button
-        onClick={() => setIsMobileMenuOpen(false)}
-        className="lg:hidden absolute top-4 right-4 p-2 hover:bg-gray-700/50 rounded-lg transition-colors"
-      >
-        <X size={20} className="text-gray-400" />
-      </button>
-    </div>
-
-    <nav className="space-y-1">
-      {/* Dashboard */}
-      <div
-        onClick={() => window.navigate('/client/dashboard')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/dashboard'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <Home size={18} />
-        <span className={`text-sm ${window.location.pathname === '/client/dashboard' ? 'font-semibold' : ''}`}>Dashboard</span>
-      </div>
-
-      {/* My RFQs */}
-      <div
-        onClick={() => window.navigate('/client/rfq/my')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/rfq/my'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <FileText size={18} />
-        <span className="text-sm">My RFQs</span>
-      </div>
-
-      {/* Quotes */}
-      <div
-        onClick={() => window.navigate('/client/quotes')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/quotes'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <Quote size={18} />
-        <span className="text-sm">Quotes</span>
-      </div>
-
-      {/* Orders / Approvals */}
-      <div
-        onClick={() => window.navigate('/client/orders-approvals')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/orders-approvals'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <ShoppingCart size={18} />
-        <span className="text-sm">Orders / Approvals</span>
-      </div>
-
-      {/* Invoices & Payments */}
-      <div
-        onClick={() => window.navigate('/client/invoices-payments')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/invoices-payments'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <CreditCard size={18} />
-        <span className="text-sm">Invoices & Payments</span>
-      </div>
-
-    </nav>
-
-    <div className="mt-auto pt-6 border-t border-gray-800/50">
-      <div
-        onClick={() => window.navigate('/client/settings')}
-        className={`flex items-center gap-3 px-3 py-3 ${
-          window.location.pathname === '/client/settings'
-            ? 'bg-blue-600/20 text-blue-400 border border-blue-500/20'
-            : 'text-gray-400 hover:text-gray-200 hover:bg-gray-700/30'
-        } rounded-lg transition-all cursor-pointer`}
-      >
-        <Settings size={18} />
-        <span className="text-sm">Settings</span>
-      </div>
-      
-      <button 
-        onClick={handleLogout}
-        className="flex items-center gap-3 px-3 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all cursor-pointer w-full"
-      >
-        <LogOut size={18} />
-        <span className="text-sm">Logout</span>
-      </button>
-    </div>
-  </div>
-</div>
 
         {/* Main Content */}
-        <div className="flex-1 w-full min-w-0">
+        <div className="flex-1 w-full min-w-0 lg:ml-64">
           {/* Top Header */}
           <div className="bg-gray-900/60 backdrop-blur-xl border-b border-gray-800/50 px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between">
